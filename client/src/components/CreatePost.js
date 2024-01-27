@@ -1,10 +1,10 @@
 // CreatePost.js
-import React, { useState } from 'react';
-import axios from 'axios';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faImage, faVideo, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import React, { useState } from 'react';
 
-const CreatePost = ({ onPostCreated }) => {
+const CreatePost = ({ toggleChange }) => {
   const [text, setText] = useState('');
   const [images, setImages] = useState([]);
   const [videos, setVideos] = useState([]);
@@ -18,16 +18,12 @@ const CreatePost = ({ onPostCreated }) => {
       videos.forEach((video) => formData.append('videos', video));
 
       await axios.post('http://localhost:5040/api/posts', formData);
-
-      // Trigger the callback to update the post list
-      if (onPostCreated) {
-        onPostCreated();
-
-        // Clear form after successful post creation
-        setText('');
-        setImages([]);
-        setVideos([]);
-      }
+      // Clear form after successful post creation
+      setText('');
+      setImages([]);
+      setVideos([]);
+      toggleChange();
+    
     } catch (error) {
       console.error('Error creating post:', error);
     }
@@ -58,7 +54,7 @@ const CreatePost = ({ onPostCreated }) => {
               <img
                 key={index}
                 src={URL.createObjectURL(image)}
-                alt={`Image ${index + 1}`}
+                alt={` ${index + 1}`}
                 className="h-16 w-16 object-cover rounded"
               />
             ))}
